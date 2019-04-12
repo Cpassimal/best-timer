@@ -1,0 +1,40 @@
+$font-family: sans-serif;
+$font-color: #ffffff;
+
+.container {
+  width: 1000px;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .timer {
+    display: flex;
+    justify-content: center;
+    font-size: 8rem;
+    font-family: $font-family;
+    margin-top: 100px;
+    color: $font-color;
+  }
+
+  .buttons {
+    display: flex;
+    justify-content: space-evenly;
+    margin-top: 20px;
+    width: 80%;
+
+    .button {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: $font-color;
+      width: 9em;
+      height: 2em;
+      border: 2px solid #ffffff;
+      border-radius: 30px;
+      font-size: 2rem;
+      font-family: $font-family;
+      cursor: pointer;
+    }
+  }
+}
