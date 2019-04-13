@@ -1,5 +1,6 @@
 $font-family: sans-serif;
-$font-color: #ffffff;
+$color-pale: #DCDCDC;
+$color-dark: #223645;
 
 .container {
   width: 1000px;
@@ -14,7 +15,7 @@ $font-color: #ffffff;
     font-size: 8rem;
     font-family: $font-family;
     margin-top: 100px;
-    color: $font-color;
+    color: $color-pale;
   }
 
   .buttons {
@@ -27,10 +28,10 @@ $font-color: #ffffff;
       display: flex;
       justify-content: center;
       align-items: center;
-      color: $font-color;
+      color: $color-pale;
       width: 9em;
       height: 2em;
-      border: 2px solid #ffffff;
+      border: 2px solid $color-pale;
       border-radius: 30px;
       font-size: 2rem;
       font-family: $font-family;
