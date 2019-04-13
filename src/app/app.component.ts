@@ -1,19 +1,6 @@
-import { Component, HostListener, NgZone } from '@angular/core';
-
-interface ITimer {
-  h: number;
-  m: number;
-  s: number;
-  ms: number;
-}
+import { Component, HostListener } from '@angular/core';
 
 const INTERVAL = 10; // ms
-const INIT_TIMER = {
-  h: 0,
-  m: 0,
-  s: 0,
-  ms: 0,
-};
 
 @Component({
   selector: 'app-root',
@@ -21,41 +8,24 @@ const INIT_TIMER = {
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
-  public timer: ITimer;
-  public formattedTimer: string;
+  public startTime: number;
+  public delta: number;
+  public lastResume: number;
+  public pastTime: number;
+
   public isPaused: boolean = true;
   public isStart: boolean = true;
   public interval: number;
 
   constructor() {
     this.resetTimer();
-    this._formatTimer();
   }
 
   public play(): void {
+    this.lastResume = Date.now();
+
     this.interval = setInterval(() => {
-      if (this.timer.ms < 990) {
-        this.timer.ms += 10;
-      } else {
-        this.timer.ms = 0;
-
-        if (this.timer.s < 59) {
-          this.timer.s += 1;
-        } else {
-          this.timer.s = 0;
-
-          if (this.timer.m < 59) {
-            this.timer.m += 1;
-          } else {
-            this.timer.m = 0;
-
-            this.timer.h += 1;
-          }
-        }
-      }
-
-      this._formatTimer();
-
+      this.delta = Date.now() - this.lastResume + this.pastTime;
     }, INTERVAL);
 
     this.isStart = false;
@@ -63,6 +33,7 @@ export class AppComponent {
 
   public pause(): void {
     clearInterval(this.interval);
+    this.pastTime = this.delta;
   }
 
   public togglePause(): void {
@@ -80,11 +51,12 @@ export class AppComponent {
     this.isStart = true;
     this.isPaused = true;
     this.resetTimer();
-    this._formatTimer();
   }
 
   public resetTimer(): void {
-    this.timer = { ...INIT_TIMER };
+    this.startTime = 0;
+    this.pastTime = 0;
+    this.delta = 0;
   }
 
   @HostListener('document:keydown', ['$event'])
@@ -103,18 +75,5 @@ export class AppComponent {
         break;
       }
     }
-  }
-
-  private _formatTimer(): void {
-    const strHours = String(this.timer.h).length === 1 ? `0${String(this.timer.h)}` : String(this.timer.h);
-    const strMins = String(this.timer.m).length === 1 ? `0${String(this.timer.m)}` : String(this.timer.m);
-    const strSecs = String(this.timer.s).length === 1 ? `0${String(this.timer.s)}` : String(this.timer.s);
-
-    const ms = Math.trunc(this.timer.ms / 10);
-    const strMs = String(ms).length === 1
-      ? `0${String(ms)}`
-      : String(ms);
-
-    this.formattedTimer = `${strHours} : ${strMins} : ${strSecs} : ${strMs}`;
   }
 }
