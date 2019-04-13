@@ -1,6 +1,9 @@
 import { Component, HostListener } from '@angular/core';
+import { Title } from '@angular/platform-browser';
+import { TimeFormatPipe } from './pipes/time-format.pipe';
 
 const INTERVAL = 10; // ms
+const TITLE = 'Timer';
 
 @Component({
   selector: 'app-root',
@@ -10,6 +13,7 @@ const INTERVAL = 10; // ms
 export class AppComponent {
   public startTime: number;
   public delta: number;
+  public deltaFormated: string;
   public lastResume: number;
   public pastTime: number;
 
@@ -17,7 +21,10 @@ export class AppComponent {
   public isStart: boolean = true;
   public interval: number;
 
-  constructor() {
+  constructor(
+    private _title: Title,
+    private _formatPipe: TimeFormatPipe,
+  ) {
     this.resetTimer();
   }
 
@@ -26,6 +33,8 @@ export class AppComponent {
 
     this.interval = setInterval(() => {
       this.delta = Date.now() - this.lastResume + this.pastTime;
+      this.deltaFormated = this._formatPipe.transform(this.delta);
+      this._title.setTitle(this.deltaFormated.slice(0, this.deltaFormated.length - 4));
     }, INTERVAL);
 
     this.isStart = false;
@@ -57,6 +66,8 @@ export class AppComponent {
     this.startTime = 0;
     this.pastTime = 0;
     this.delta = 0;
+    this.deltaFormated = this._formatPipe.transform(this.delta);
+    this._title.setTitle(TITLE);
   }
 
   @HostListener('document:keydown', ['$event'])
