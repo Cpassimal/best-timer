@@ -1,9 +1,15 @@
 import { Component, HostListener } from '@angular/core';
 import { Title } from '@angular/platform-browser';
-import { TimeFormatPipe } from './pipes/time-format.pipe';
 
 const INTERVAL = 10; // ms
 const TITLE = 'Timer';
+
+interface ITimer {
+  h: string;
+  m: string;
+  s: string;
+  ms: string;
+}
 
 @Component({
   selector: 'app-root',
@@ -13,7 +19,7 @@ const TITLE = 'Timer';
 export class AppComponent {
   public startTime: number;
   public delta: number;
-  public deltaFormated: string;
+  public deltaFormated: ITimer;
   public lastResume: number;
   public pastTime: number;
 
@@ -23,7 +29,6 @@ export class AppComponent {
 
   constructor(
     private _title: Title,
-    private _formatPipe: TimeFormatPipe,
   ) {
     this.resetTimer();
   }
@@ -33,8 +38,8 @@ export class AppComponent {
 
     this.interval = setInterval(() => {
       this.delta = Date.now() - this.lastResume + this.pastTime;
-      this.deltaFormated = this._formatPipe.transform(this.delta);
-      this._title.setTitle(this.deltaFormated.slice(0, this.deltaFormated.length - 4));
+      this.deltaFormated = this._formatTime(this.delta);
+      this._title.setTitle(`${this.deltaFormated.h} : ${this.deltaFormated.m} : ${this.deltaFormated.s}`);
     }, INTERVAL);
 
     this.isStart = false;
@@ -66,7 +71,7 @@ export class AppComponent {
     this.startTime = 0;
     this.pastTime = 0;
     this.delta = 0;
-    this.deltaFormated = this._formatPipe.transform(this.delta);
+    this.deltaFormated = this._formatTime(this.delta);
     this._title.setTitle(TITLE);
   }
 
@@ -86,5 +91,24 @@ export class AppComponent {
         break;
       }
     }
+  }
+
+  private _formatTime(value: number): ITimer {
+    const hours = Math.trunc(value / 1000 / 3600);
+    const mins = Math.trunc((value - hours * 3600 * 1000) / 1000 / 60);
+    const secs = Math.trunc((value - hours * 3600 * 1000 - mins * 60 * 1000) / 1000);
+    const ms = Math.trunc((value - hours * 3600 * 1000 - mins * 60 * 1000 - secs * 1000) / 10);
+
+    const strHours = String(hours).length === 1 ? `0${String(hours)}` : String(hours);
+    const strMins = String(mins).length === 1 ? `0${String(mins)}` : String(mins);
+    const strSecs = String(secs).length === 1 ? `0${String(secs)}` : String(secs);
+    const strMs = String(ms).length === 1 ? `0${String(ms)}` : String(ms);
+
+    return {
+      h: strHours,
+      m: strMins,
+      s: strSecs,
+      ms: strMs,
+    };
   }
 }

@@ -1,1 +1,11 @@
-/* You can add global styles to this file, and also import other style files */
+$font-family: sans-serif;
+$color-pale: #DCDCDC;
+$color-dark: #223645;
+
+$grid-breakpoints: (
+        phone: 0,
+        tablet: 784px,
+        desktop: 1168px,
+);
+$phone: '(max-width: #{map_get($grid-breakpoints, tablet) - 1})';
+$desktop: '(min-width: #{map_get($grid-breakpoints, desktop)})';

@@ -1,13 +1,39 @@
 <div class="container">
   <div class="timer">
-    {{ deltaFormated }}
+    <div class="entity">
+      <span class="title">Hours</span>
+      <div class="value">
+        {{ deltaFormated.h }}
+      </div>
+    </div>
+    <span class="separator">:</span>
+    <div class="entity">
+      <span class="title">Minutes</span>
+      <div class="value">
+        {{ deltaFormated.m }}
+      </div>
+    </div>
+    <span class="separator">:</span>
+    <div class="entity">
+      <span class="title">Seconds</span>
+      <div class="value">
+        {{ deltaFormated.s }}
+      </div>
+    </div>
+    <span class="separator">:</span>
+    <div class="entity">
+      <span class="title">Milliseconds</span>
+      <div class="value">
+        {{ deltaFormated.ms }}
+      </div>
+    </div>
   </div>
   <div class="buttons">
     <div (click)="togglePause()"
          class="button">
       <span *ngIf="isStart">Start</span>
       <span *ngIf="!isStart && !isPaused">Pause</span>
-      <span *ngIf="!isStart && isPaused">Resume</span>
+      <span *ngIf="!isStart && isPaused">Continue</span>
     </div>
     <div (click)="clear()"
          class="button">
