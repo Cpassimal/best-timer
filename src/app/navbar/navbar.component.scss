@@ -1,0 +1,28 @@
+@import '../../styles';
+
+.navbar {
+  display: flex;
+  height: 100px;
+  color: $color-pale;
+  font-size: 24px;
+  font-family: $font-family;
+
+  .header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50%;
+    cursor: pointer;
+    outline: none;
+
+    &.countdown-is-active {
+      border-bottom: 2px solid $color-pale;
+      //border-radius: 30px;
+    }
+
+    &.chrono-is-active {
+      border-bottom: 2px solid $color-pale;
+      //border-radius: 30px;
+    }
+  }
+}
