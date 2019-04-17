@@ -1,0 +1,16 @@
+<div class="navbar">
+  <div class="header"
+       [class.chrono-is-active]="chrono.isActive"
+       routerLink="chronometer"
+       routerLinkActive
+       #chrono="routerLinkActive">
+    <span>Chrono</span>
+  </div>
+  <div class="header"
+       [class.countdown-is-active]="countdown.isActive"
+       routerLink="countdown"
+       routerLinkActive
+       #countdown="routerLinkActive">
+    <span>Countdown</span>
+  </div>
+</div>

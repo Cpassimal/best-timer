@@ -1,0 +1,14 @@
+@import '../../styles';
+
+.temp {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 100px;
+
+  span {
+    font-family: $font-family;
+    font-size: 16px;
+    color: $color-pale;
+  }
+}

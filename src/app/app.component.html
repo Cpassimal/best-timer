@@ -1,17 +1,2 @@
-<div class="container">
-  <div class="timer">
-    {{ deltaFormated }}
-  </div>
-  <div class="buttons">
-    <div (click)="togglePause()"
-         class="button">
-      <span *ngIf="isStart">Start</span>
-      <span *ngIf="!isStart && !isPaused">Pause</span>
-      <span *ngIf="!isStart && isPaused">Resume</span>
-    </div>
-    <div (click)="clear()"
-         class="button">
-      <span>Clear</span>
-    </div>
-  </div>
-</div>
+<app-navbar></app-navbar>
+<router-outlet></router-outlet>
