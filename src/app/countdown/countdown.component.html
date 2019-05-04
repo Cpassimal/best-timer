@@ -1,3 +1,27 @@
-<div class="temp">
-  <span>Incoming ;)</span>
+<div class="container">
+  <ng-container *ngIf="!isTimeUp; else timeUp">
+    <app-timer [timer]="deltaFormated"
+                [withArrows]="withArrows"
+                (onTimerChange)="updateInitialTimer($event)"></app-timer>
+
+    <div class="buttons">
+      <div (click)="togglePause()"
+            class="button">
+        <span *ngIf="isStart">Start</span>
+        <span *ngIf="!isStart && !isPaused">Pause</span>
+        <span *ngIf="!isStart && isPaused">Continue</span>
+      </div>
+      <div (click)="clear()"
+            class="button">
+        <span>Clear</span>
+      </div>
+    </div>
+  </ng-container>
 </div>
+
+<ng-template #timeUp>
+  <div class="time-is-up">
+    <span>Time's UP !</span>
+  </div>
+</ng-template>
+  

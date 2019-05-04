@@ -1,15 +1,11 @@
 import { Component, HostListener, OnDestroy } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 
+import { formatTimes } from '../helper';
+import { ITimer } from '../interfaces';
+
 const INTERVAL = 10; // ms
 const TITLE = 'Timer';
-
-interface ITimer {
-  h: string;
-  m: string;
-  s: string;
-  ms: string;
-}
 
 @Component({
   selector: 'app-chrono',
@@ -78,7 +74,12 @@ export class ChronometerComponent implements OnDestroy {
   @HostListener('document:keydown', ['$event'])
   public onKeyBoardEvent(event: KeyboardEvent): void {
     switch (event.code) {
-      case 'Enter':
+      case 'Enter': {
+        this.clear();
+        this.togglePause();
+
+        break;
+      }
       case 'Space': {
         this.togglePause();
 
@@ -103,10 +104,10 @@ export class ChronometerComponent implements OnDestroy {
     const secs = Math.trunc((value - hours * 3600 * 1000 - mins * 60 * 1000) / 1000);
     const ms = Math.trunc((value - hours * 3600 * 1000 - mins * 60 * 1000 - secs * 1000) / 10);
 
-    const strHours = String(hours).length === 1 ? `0${String(hours)}` : String(hours);
-    const strMins = String(mins).length === 1 ? `0${String(mins)}` : String(mins);
-    const strSecs = String(secs).length === 1 ? `0${String(secs)}` : String(secs);
-    const strMs = String(ms).length === 1 ? `0${String(ms)}` : String(ms);
+    const strHours = formatTimes(hours);
+    const strMins = formatTimes(mins);
+    const strSecs = formatTimes(secs);
+    const strMs = formatTimes(ms);
 
     return {
       h: strHours,

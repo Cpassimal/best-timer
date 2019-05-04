@@ -1,0 +1,82 @@
+@import '../../styles';
+
+@keyframes arrowAnim {
+  from { transform: scale(1); }
+  to { transform: scale(1.4); }
+}
+
+.timer {
+  display: flex;
+  justify-content: center;
+  font-family: $font-family;
+  margin-top: 75px;
+  color: $color-pale;
+  overflow-x: hidden;
+
+  @media #{$phone} {
+    margin-top: 50px;
+  }
+
+  .entity {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    position: relative;
+
+    .title {
+      font-size: 16px;
+
+      @media #{$phone} {
+        font-size: 8px;
+      }
+    }
+
+    .arrow-up {
+      @extend .arrow-common;
+      top: 26px;
+      border-bottom: 10px solid $color-pale;
+    }
+
+    .value {
+      font-size: 128px;
+
+      @media #{$phone} {
+        font-size: 42px;
+      }
+    }
+
+    .arrow-down {
+      @extend .arrow-common;
+      bottom: 12px;
+      border-top: 10px solid $color-pale;
+    }
+
+    .arrow-common {
+      width: 0;
+      height: 0;
+      position: absolute;
+      border-left: 15px solid transparent;
+      border-right: 15px solid transparent;
+      cursor: pointer;
+
+      &:hover {
+        animation: arrowAnim 0.15s forwards;
+      }
+    }
+  }
+
+  .separator {
+    margin-top: 25px;
+    margin-right: 30px;
+    margin-left: 30px;
+    font-size: 128px;
+
+    @media #{$phone} {
+      margin-top: 7px;
+      margin-right: 6px;
+      margin-left: 6px;
+      font-size: 42px;
+    }
+  }
+}
