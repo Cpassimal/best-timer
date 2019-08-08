@@ -2,6 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import {FormsModule} from '@angular/forms';
 
 import { WINDOW_PROVIDER } from './core/window';
 
@@ -13,6 +14,8 @@ import { CountdownComponent } from './countdown/countdown.component';
 import { TimerComponent } from './timer/timer.component';
 
 import { PipesModule } from './pipes/pipes.module';
+import {ChatComponent} from './chat/chat.component';
+import {ChatService} from './chat/chat.service';
 
 @NgModule({
   declarations: [
@@ -21,6 +24,7 @@ import { PipesModule } from './pipes/pipes.module';
     ChronometerComponent,
     CountdownComponent,
     TimerComponent,
+    ChatComponent,
   ],
   imports: [
     BrowserModule,
@@ -28,9 +32,11 @@ import { PipesModule } from './pipes/pipes.module';
     PipesModule,
     AppRoutingModule,
     RouterModule,
+    FormsModule,
   ],
   providers: [
     WINDOW_PROVIDER,
+    ChatService,
   ],
   bootstrap: [AppComponent],
 })

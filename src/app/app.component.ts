@@ -1,4 +1,7 @@
-import { Component, HostListener } from '@angular/core';
+import { Component } from '@angular/core';
+
+import { ChatService } from './chat/chat.service';
+import {BehaviorSubject} from "rxjs";
 
 @Component({
   selector: 'app-root',
@@ -6,4 +9,11 @@ import { Component, HostListener } from '@angular/core';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
+  public isChatActive$: BehaviorSubject<boolean>;
+
+  constructor(
+    private _chatService: ChatService,
+  ) {
+    this.isChatActive$ = this._chatService.isActive$;
+  }
 }

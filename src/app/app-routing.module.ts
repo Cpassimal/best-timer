@@ -4,6 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { AppComponent } from './app.component';
 import { ChronometerComponent } from './chronometer/chronometer.component';
 import { CountdownComponent } from './countdown/countdown.component';
+import { ChatComponent } from './chat/chat.component';
 
 export const ROUTES: Routes = [
   {
@@ -18,6 +19,10 @@ export const ROUTES: Routes = [
   {
     path: 'countdown',
     component: CountdownComponent,
+  },
+  {
+    path: 'chat',
+    component: ChatComponent,
   },
   {
     path: '**',

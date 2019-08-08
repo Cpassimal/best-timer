@@ -1,0 +1,8 @@
+<form>
+  <input #input type="text">
+  <button type="submit"
+          (click)="send(input.value)">Send</button>
+</form>
+<p *ngFor="let message of messages">
+  {{ message.sender }}: {{ message.content }}
+</p>
