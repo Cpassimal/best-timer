@@ -15,6 +15,21 @@ export class TimerComponent {
   @Input()
   public withArrows: boolean = false;
 
+  @Input()
+  public small: boolean = false;
+
+  @Input()
+  public withH: boolean = true;
+
+  @Input()
+  public withM: boolean = true;
+
+  @Input()
+  public withS: boolean = true;
+
+  @Input()
+  public withMs: boolean = true;
+
   @Output()
   public onTimerChange: EventEmitter<ITimer> = new EventEmitter();
 

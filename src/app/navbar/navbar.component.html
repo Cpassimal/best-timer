@@ -13,4 +13,11 @@
        #countdown="routerLinkActive">
     <span>Countdown</span>
   </div>
+  <div class="header"
+       [class.countdown-is-active]="series.isActive"
+       routerLink="series"
+       routerLinkActive
+       #series="routerLinkActive">
+    <span>Series</span>
+  </div>
 </div>
