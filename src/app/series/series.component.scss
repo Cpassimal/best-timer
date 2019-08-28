@@ -25,10 +25,12 @@ input[type=number]::-webkit-outer-spin-button {
 
   .setup {
     margin-top: 4em;
+    width: 100%;
 
     .timers {
       display: flex;
       align-items: flex-start;
+      justify-content: space-evenly;
 
       .item {
         display: flex;
