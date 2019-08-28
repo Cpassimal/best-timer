@@ -1,7 +1,7 @@
 import { Component, HostListener, OnDestroy } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 
-import { formatTimes } from '../helper';
+import { formatTimeToTimer } from '../helper';
 import { ITimer } from '../interfaces';
 
 const INTERVAL = 10; // ms
@@ -17,14 +17,14 @@ export class SeriesComponent implements OnDestroy {
   public deltaFormated: ITimer;
   public seriesFormated: ITimer = {
     h: null,
-    m: '0',
-    s: '04',
+    m: '01',
+    s: '00',
     ms: null,
   };
   public pausesFormated: ITimer = {
     h: null,
-    m: '0',
-    s: '04',
+    m: '01',
+    s: '30',
     ms: null,
   };
   public series: number = 3;
@@ -81,7 +81,7 @@ export class SeriesComponent implements OnDestroy {
 
     this.interval = setInterval(() => {
       this.delta = Date.now() - this.lastResume + this.pastTime;
-      this.deltaFormated = this._formatTime(this.delta);
+      this.deltaFormated = formatTimeToTimer(this.delta);
       this._title.setTitle(`${this.deltaFormated.h} : ${this.deltaFormated.m} : ${this.deltaFormated.s}`);
       let toTest = this.seriesArray;
 
@@ -125,7 +125,7 @@ export class SeriesComponent implements OnDestroy {
   public resetTimer(): void {
     this.pastTime = 0;
     this.delta = 0;
-    this.deltaFormated = this._formatTime(this.delta);
+    this.deltaFormated = formatTimeToTimer(this.delta);
     this._title.setTitle(TITLE);
   }
 
@@ -154,25 +154,6 @@ export class SeriesComponent implements OnDestroy {
 
   public ngOnDestroy(): void {
     this.clear();
-  }
-
-  private _formatTime(value: number): ITimer {
-    const hours = Math.trunc(value / 1000 / 3600);
-    const mins = Math.trunc((value - hours * 3600 * 1000) / 1000 / 60);
-    const secs = Math.trunc((value - hours * 3600 * 1000 - mins * 60 * 1000) / 1000);
-    const ms = Math.trunc((value - hours * 3600 * 1000 - mins * 60 * 1000 - secs * 1000) / 10);
-
-    const strHours = formatTimes(hours);
-    const strMins = formatTimes(mins);
-    const strSecs = formatTimes(secs);
-    const strMs = formatTimes(ms);
-
-    return {
-      h: strHours,
-      m: strMins,
-      s: strSecs,
-      ms: strMs,
-    };
   }
 
   public get seriesArray(): number[] {

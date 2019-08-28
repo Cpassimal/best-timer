@@ -3,15 +3,15 @@
   <ng-container *ngIf="withH">
     <div class="entity">
       <span class="title">Hours</span>
-      <div *ngIf="withArrows"
-           (click)= "onArrowClick('up', 'h')"
+      <div (click)= "onArrowClick('up', 'h')"
+           [class.show]="withArrows"
            class="arrow-up"></div>
       <div class="value"
            [class.small]="small">
         {{ timer?.h }}
       </div>
-      <div *ngIf="withArrows"
-           (click)= "onArrowClick('down', 'h')"
+      <div (click)= "onArrowClick('down', 'h')"
+           [class.show]="withArrows"
            class="arrow-down"></div>
     </div>
     <span *ngIf="withM || withS || withMs"
@@ -22,14 +22,14 @@
   <ng-container *ngIf="withM">
     <div class="entity">
       <span class="title">Minutes</span>
-      <div *ngIf="withArrows"
+      <div [class.show]="withArrows"
            (click)= "onArrowClick('up', 'm')"
            class="arrow-up"></div>
       <div class="value"
            [class.small]="small">
         {{ timer?.m }}
       </div>
-      <div *ngIf="withArrows"
+      <div [class.show]="withArrows"
            (click)= "onArrowClick('down', 'm')"
            class="arrow-down"></div>
     </div>
@@ -41,14 +41,14 @@
   <ng-container *ngIf="withS">
     <div class="entity">
       <span class="title">Seconds</span>
-      <div *ngIf="withArrows"
+      <div [class.show]="withArrows"
            (click)= "onArrowClick('up', 's')"
            class="arrow-up"></div>
       <div class="value"
            [class.small]="small">
         {{ timer?.s }}
       </div>
-      <div *ngIf="withArrows"
+      <div [class.show]="withArrows"
            (click)= "onArrowClick('down', 's')"
            class="arrow-down"></div>
     </div>
@@ -60,14 +60,14 @@
   <ng-container *ngIf="withMs">
     <div class="entity">
       <span class="title">Milliseconds</span>
-      <div *ngIf="withArrows"
+      <div [class.show]="withArrows"
            (click)= "onArrowClick('up', 'ms')"
            class="arrow-up"></div>
       <div class="value"
            [class.small]="small">
         {{ timer?.ms }}
       </div>
-      <div *ngIf="withArrows"
+      <div [class.show]="withArrows"
            (click)= "onArrowClick('down', 'ms')"
            class="arrow-down"></div>
     </div>

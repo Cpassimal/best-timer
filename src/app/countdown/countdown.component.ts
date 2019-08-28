@@ -1,7 +1,7 @@
 import { Component, HostListener, OnDestroy } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 
-import { formatTimes } from '../helper';
+import { formatTimeToTimer } from '../helper';
 import { ITimer } from '../interfaces';
 
 const INTERVAL = 10; // ms
@@ -52,7 +52,7 @@ export class CountdownComponent implements OnDestroy {
         this.isTimeUp = true;
         this.clear();
       } else {
-        this.deltaFormated = this._formatTimeToTimer(this.delta);
+        this.deltaFormated = formatTimeToTimer(this.delta);
         this._title.setTitle(`${this.deltaFormated.h} : ${this.deltaFormated.m} : ${this.deltaFormated.s}`);
       }
     }, INTERVAL);
@@ -92,9 +92,9 @@ export class CountdownComponent implements OnDestroy {
     this.delta = 0;
 
     if (this.initialTime) {
-      this.deltaFormated = this._formatTimeToTimer(this.initialTime);
+      this.deltaFormated = formatTimeToTimer(this.initialTime);
     } else {
-      this.deltaFormated = this._formatTimeToTimer(this.delta);
+      this.deltaFormated = formatTimeToTimer(this.delta);
       this._title.setTitle(TITLE);
     }
   }
@@ -135,25 +135,6 @@ export class CountdownComponent implements OnDestroy {
 
   public ngOnDestroy(): void {
     this.clear();
-  }
-
-  private _formatTimeToTimer(value: number): ITimer {
-    const hours = Math.trunc(value / 1000 / 3600);
-    const mins = Math.trunc((value - hours * 3600 * 1000) / 1000 / 60);
-    const secs = Math.trunc((value - hours * 3600 * 1000 - mins * 60 * 1000) / 1000);
-    const ms = Math.trunc((value - hours * 3600 * 1000 - mins * 60 * 1000 - secs * 1000) / 10);
-
-    const strHours = formatTimes(hours);
-    const strMins = formatTimes(mins);
-    const strSecs = formatTimes(secs);
-    const strMs = formatTimes(ms);
-
-    return {
-      h: strHours,
-      m: strMins,
-      s: strSecs,
-      ms: strMs,
-    };
   }
 
   private _formatTimerToTime(timer: ITimer): number {
