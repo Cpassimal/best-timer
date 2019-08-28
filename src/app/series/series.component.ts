@@ -4,6 +4,13 @@ import { Title } from '@angular/platform-browser';
 import { formatTimeToTimer } from '../helper';
 import { ITimer } from '../interfaces';
 
+interface IInterval {
+  index: number;
+  start: number;
+  end: number;
+  isSerie: boolean;
+}
+
 const INTERVAL = 10; // ms
 const TITLE = 'Timer';
 
@@ -15,21 +22,28 @@ const TITLE = 'Timer';
 export class SeriesComponent implements OnDestroy {
   public delta: number;
   public deltaFormated: ITimer;
-  public seriesFormated: ITimer = {
+  public seriesFormated: ITimer;
+  public pausesFormated: ITimer;
+  public runningSeriesFormated: ITimer;
+  public runningPausesFormated: ITimer;
+
+  public initialSeriesFormated: ITimer = {
     h: null,
-    m: '01',
-    s: '00',
+    m: '00',
+    s: '45',
     ms: null,
   };
-  public pausesFormated: ITimer = {
+  public initialPausesFormated: ITimer = {
     h: null,
     m: '01',
     s: '30',
     ms: null,
   };
+
   public series: number = 3;
   public lastResume: number;
   public pastTime: number;
+  public withArrows: boolean = true;
 
   public isPaused: boolean = true;
   public isStart: boolean = true;
@@ -78,11 +92,39 @@ export class SeriesComponent implements OnDestroy {
 
   public play(): void {
     this.lastResume = Date.now();
+    this.withArrows = false;
+    const intervals = this.getIntervals();
 
     this.interval = setInterval(() => {
       this.delta = Date.now() - this.lastResume + this.pastTime;
       this.deltaFormated = formatTimeToTimer(this.delta);
       this._title.setTitle(`${this.deltaFormated.h} : ${this.deltaFormated.m} : ${this.deltaFormated.s}`);
+
+      const deltaS = this.delta / 1000;
+      let currentInterval: IInterval;
+
+      for (const i of intervals) {
+        if (i.start < deltaS && i.end > deltaS) {
+          currentInterval = i;
+        }
+      }
+
+      if (currentInterval) {
+        if (currentInterval.isSerie) {
+          this.runningSeriesFormated = formatTimeToTimer(
+            this._initialSeriesTime * 1000 - (this.delta - (currentInterval.index * 1000 * (this._initialSeriesTime + this._initialPausesTime)))
+          );
+          this.runningPausesFormated = null;
+        } else {
+          this.runningPausesFormated = formatTimeToTimer(
+            this._initialPausesTime * 1000 - (this.delta - ((currentInterval.index + 1) * 1000 * this._initialSeriesTime + currentInterval.index * 1000 * this._initialPausesTime))
+          );
+          this.runningSeriesFormated = null;
+        }
+      } else {
+        this.clear();
+      }
+
       let toTest = this.seriesArray;
 
       for (const item of toTest) {
@@ -125,6 +167,11 @@ export class SeriesComponent implements OnDestroy {
   public resetTimer(): void {
     this.pastTime = 0;
     this.delta = 0;
+    this.withArrows = true;
+    this.seriesFormated = this.initialSeriesFormated;
+    this.pausesFormated = this.initialPausesFormated;
+    this.runningSeriesFormated = null;
+    this.runningPausesFormated = null;
     this.deltaFormated = formatTimeToTimer(this.delta);
     this._title.setTitle(TITLE);
   }
@@ -172,16 +219,57 @@ export class SeriesComponent implements OnDestroy {
     return 100 * this._pausesTime / (this.series * this._seriesTime + (this.series - 1) * this._pausesTime);
   }
 
-  private get _seriesTime(): number {
-    let s = +this.seriesFormated.s;
-    let m = +this.seriesFormated.m;
+  public getIntervals(): IInterval[] {
+    const intervals = [];
+    let time = 0;
 
-    return 60 * m + s;
+    for (const i of this.seriesArray) {
+      const serieInterval: IInterval = {
+        index: i,
+        start: 0,
+        end: 0,
+        isSerie: true,
+      };
+      serieInterval.start = time;
+      time += this._initialSeriesTime;
+      serieInterval.end = time;
+      intervals.push(serieInterval);
+
+      const pauseInterval: IInterval = {
+        index: i,
+        start: time,
+        end: 0,
+        isSerie: false,
+      };
+      time += this._initialPausesTime;
+      pauseInterval.end = time;
+      intervals.push(pauseInterval);
+    }
+
+    return intervals;
+  }
+
+  private get _seriesTime(): number {
+    return this._getTimeFromTimer(this.seriesFormated);
   }
 
   private get _pausesTime(): number {
-    let s = +this.pausesFormated.s;
-    let m = +this.pausesFormated.m;
+    return this._getTimeFromTimer(this.pausesFormated);
+  }
+
+  private get _initialSeriesTime(): number {
+    return this._getTimeFromTimer(this.initialSeriesFormated);
+  }
+
+  private get _initialPausesTime(): number {
+    return this._getTimeFromTimer(this.initialPausesFormated);
+  }
+
+  private _getTimeFromTimer(
+    timer: ITimer,
+  ): number {
+    let s = +timer.s;
+    let m = +timer.m;
 
     return 60 * m + s;
   }

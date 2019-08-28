@@ -3,11 +3,11 @@
     <div class="timers">
       <div class="item">
         <span class="title">Series</span>
-        <app-timer [timer]="seriesFormated"
+        <app-timer [timer]="runningSeriesFormated || seriesFormated"
                    [small]="true"
                    [withH]="false"
                    [withMs]="false"
-                   [withArrows]="true"></app-timer>
+                   [withArrows]="withArrows"></app-timer>
       </div>
       <div class="item">
         <span class="title">Reps</span>
@@ -17,11 +17,11 @@
       </div>
       <div class="item">
         <span class="title">Pauses</span>
-        <app-timer [timer]="pausesFormated"
+        <app-timer [timer]="runningPausesFormated ||  pausesFormated"
                    [small]="true"
                    [withH]="false"
                    [withMs]="false"
-                   [withArrows]="true"></app-timer>
+                   [withArrows]="withArrows"></app-timer>
       </div>
     </div>
   </div>
