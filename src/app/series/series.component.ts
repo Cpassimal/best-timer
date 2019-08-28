@@ -8,13 +8,26 @@ const INTERVAL = 10; // ms
 const TITLE = 'Timer';
 
 @Component({
-  selector: 'app-chrono',
-  templateUrl: './chronometer.component.html',
-  styleUrls: ['./chronometer.component.scss'],
+  selector: 'app-series',
+  templateUrl: './series.component.html',
+  styleUrls: ['./series.component.scss'],
 })
-export class ChronometerComponent implements OnDestroy {
+export class SeriesComponent implements OnDestroy {
   public delta: number;
   public deltaFormated: ITimer;
+  public seriesFormated: ITimer = {
+    h: null,
+    m: '0',
+    s: '04',
+    ms: null,
+  };
+  public pausesFormated: ITimer = {
+    h: null,
+    m: '0',
+    s: '04',
+    ms: null,
+  };
+  public series: number = 3;
   public lastResume: number;
   public pastTime: number;
 
@@ -22,10 +35,45 @@ export class ChronometerComponent implements OnDestroy {
   public isStart: boolean = true;
   public interval: number;
 
+  private _audioHigh = new Audio('assets/high.mp3');
+  private _audioLow = new Audio('assets/low.mp3');
+
   constructor(
     private _title: Title,
   ) {
     this.resetTimer();
+  }
+
+  public playSound(
+    end: boolean = false
+  ): void {
+    let count = 1;
+
+    const interval = setInterval(() => {
+      count++;
+
+      if (count > (end ? 4 : 2)) {
+        this._audioHigh.play();
+        clearInterval(interval)
+
+        if (end) {
+          let count2 = 1;
+
+          const interval2 = setInterval(() => {
+            this._audioHigh.play();
+            count2++;
+
+            if (count2 > 2){
+              clearInterval(interval2);
+            }
+          }, 500)
+        }
+      } else {
+        this._audioLow.play();
+      }
+    }, end ? 500 : 1000);
+
+    this._audioLow.play();
   }
 
   public play(): void {
@@ -35,6 +83,18 @@ export class ChronometerComponent implements OnDestroy {
       this.delta = Date.now() - this.lastResume + this.pastTime;
       this.deltaFormated = this._formatTime(this.delta);
       this._title.setTitle(`${this.deltaFormated.h} : ${this.deltaFormated.m} : ${this.deltaFormated.s}`);
+      let toTest = this.seriesArray;
+
+      for (const item of toTest) {
+        const endSerieTime = ((item + 1) * this._seriesTime + item * this._pausesTime) * 1000;
+        const endPauseTime = item !== toTest.length - 1 ? (endSerieTime + this._pausesTime * 1000) : 0;
+
+        if (Math.abs(this.delta - endSerieTime + 2000) < 2 * INTERVAL || Math.abs(this.delta - endPauseTime + 2000) < 2 * INTERVAL){
+          this.playSound(item === toTest.length - 1);
+
+          break;
+        }
+      }
     }, INTERVAL);
 
     this.isStart = false;
@@ -113,5 +173,35 @@ export class ChronometerComponent implements OnDestroy {
       s: strSecs,
       ms: strMs,
     };
+  }
+
+  public get seriesArray(): number[] {
+    return Array.apply(null, Array(this.series)).map((_, i) => i);
+  }
+
+  public get currentWidth(): number {
+    return 100 * Math.min(this.delta / (this.series * this._seriesTime + (this.series - 1) * this._pausesTime) / 1000, 1);
+  }
+
+  public get seriesWidth(): number {
+    return 100 * this._seriesTime / (this.series * this._seriesTime + (this.series - 1) * this._pausesTime);
+  }
+
+  public get pausesWidth(): number {
+    return 100 * this._pausesTime / (this.series * this._seriesTime + (this.series - 1) * this._pausesTime);
+  }
+
+  private get _seriesTime(): number {
+    let s = +this.seriesFormated.s;
+    let m = +this.seriesFormated.m;
+
+    return 60 * m + s;
+  }
+
+  private get _pausesTime(): number {
+    let s = +this.pausesFormated.s;
+    let m = +this.pausesFormated.m;
+
+    return 60 * m + s;
   }
 }

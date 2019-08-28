@@ -1,0 +1,145 @@
+@import '../../styles';
+
+@keyframes timeIsUp {
+  from { transform: scale(1); }
+  to { transform: scale(1.5); }
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.container {
+  width: 80%;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  @media #{$phone} {
+    width: 90%;
+  }
+
+  .setup {
+    margin-top: 4em;
+
+    .timers {
+      display: flex;
+      align-items: flex-start;
+
+      .item {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        margin: 0 4em;
+
+        span {
+          color: $color-pale;
+          font-family: $font-family;
+          font-size: 24px;
+          text-align: center;
+          width: 100%;
+        }
+
+        input {
+          margin-top: 25px;
+          background: $color-darker;
+          border: none;
+          outline: none;
+          width: 106px;
+          height: 106px;
+          text-align: center;
+          font-size: 64px;
+          color: $color-pale;
+        }
+      }
+    }
+
+    app-timer {
+      margin: 0 2em;
+    }
+  }
+
+  .series {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    margin: 1em 0;
+    position: relative;
+    background: $color-pale;
+    height: 15px;
+
+    .cursor {
+      position: absolute;
+      width: 2px;
+      height: 15px;
+      background: $color-red;
+    }
+
+    .serie,
+    .pause {
+      height: 100%;
+    }
+
+    .pause {
+      position: relative;
+      min-width: 3px;
+
+      &:before,
+      &:after {
+        content: '';
+        height: 4px;
+        background: $color-dark;
+        width: 100%;
+        position: absolute;
+      }
+
+      &:before {
+        top: 0;
+      }
+
+      &:after {
+        bottom: 0;
+      }
+    }
+  }
+
+  .buttons {
+    display: flex;
+    justify-content: space-evenly;
+    margin-top: 20px;
+    width: 80%;
+
+    @media #{$phone} {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 0;
+      width: 90%;
+    }
+
+    .button {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: $color-pale;
+      width: 300px;
+      height: 60px;
+      border: 2px solid $color-pale;
+      border-radius: 30px;
+      font-size: 30px;
+      font-family: $font-family;
+      cursor: pointer;
+
+      @media #{$phone} {
+        margin-top: 20px;
+        width: 90%;
+        height: 50px;
+      }
+    }
+  }
+}

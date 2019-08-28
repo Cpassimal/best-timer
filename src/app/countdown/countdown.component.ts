@@ -1,4 +1,4 @@
-import { Component, HostListener } from '@angular/core';
+import { Component, HostListener, OnDestroy } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 
 import { formatTimes } from '../helper';
@@ -12,8 +12,7 @@ const TITLE = 'Timer';
   templateUrl: './countdown.component.html',
   styleUrls: ['./countdown.component.scss'],
 })
-export class CountdownComponent {
-  public startTime: ITimer;
+export class CountdownComponent implements OnDestroy {
   public delta: number;
   public deltaFormated: ITimer;
   public lastResume: number;

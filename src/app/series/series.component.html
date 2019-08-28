@@ -1,0 +1,56 @@
+<div class="container">
+  <div class="setup">
+    <div class="timers">
+      <div class="item">
+        <span class="title">N</span>
+        <input [(ngModel)]="series"
+               type="number">
+      </div>
+      <div class="item">
+        <span class="title">Series</span>
+        <app-timer [timer]="seriesFormated"
+                   [small]="true"
+                   [withH]="false"
+                   [withMs]="false"
+                   [withArrows]="true"></app-timer>
+      </div>
+      <div class="item">
+        <span class="title">Pauses</span>
+        <app-timer [timer]="pausesFormated"
+                   [small]="true"
+                   [withH]="false"
+                   [withMs]="false"
+                   [withArrows]="true"></app-timer>
+      </div>
+    </div>
+  </div>
+
+  <div class="series">
+    <div [style.width.%]="currentWidth"
+         class="cursor">
+    </div>
+
+    <ng-container *ngFor="let i of seriesArray; let last = last">
+      <div class="serie"
+           [style.width.%]="seriesWidth"></div>
+
+      <div *ngIf="!last"
+           [style.width.%]="pausesWidth"
+           class="pause">
+      </div>
+    </ng-container>
+  </div>
+
+  <div class="buttons">
+    <div (click)="togglePause()"
+         class="button">
+      <span *ngIf="isStart">Start</span>
+      <span *ngIf="!isStart && !isPaused">Pause</span>
+      <span *ngIf="!isStart && isPaused">Continue</span>
+    </div>
+    <div (click)="clear()"
+         class="button">
+      <span>Clear</span>
+    </div>
+  </div>
+</div>
