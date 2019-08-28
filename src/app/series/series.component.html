@@ -2,17 +2,18 @@
   <div class="setup">
     <div class="timers">
       <div class="item">
-        <span class="title">N</span>
-        <input [(ngModel)]="series"
-               type="number">
-      </div>
-      <div class="item">
         <span class="title">Series</span>
         <app-timer [timer]="seriesFormated"
                    [small]="true"
                    [withH]="false"
                    [withMs]="false"
                    [withArrows]="true"></app-timer>
+      </div>
+      <div class="item">
+        <span class="title">Reps</span>
+        <input [(ngModel)]="series"
+               class="reps"
+               type="number">
       </div>
       <div class="item">
         <span class="title">Pauses</span>
