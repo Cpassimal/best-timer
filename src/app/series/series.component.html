@@ -4,9 +4,9 @@
       <div class="item">
         <span class="title">Series</span>
         <app-timer [timer]="runningSeriesFormated || seriesFormated"
+                   (onTimerChange)="setInitialSeries()"
                    [small]="true"
                    [withH]="false"
-                   [withMs]="false"
                    [withArrows]="withArrows"></app-timer>
       </div>
       <div class="item">
@@ -18,9 +18,9 @@
       <div class="item">
         <span class="title">Pauses</span>
         <app-timer [timer]="runningPausesFormated ||  pausesFormated"
+                   (onTimerChange)="setInitialPauses()"
                    [small]="true"
                    [withH]="false"
-                   [withMs]="false"
                    [withArrows]="withArrows"></app-timer>
       </div>
     </div>

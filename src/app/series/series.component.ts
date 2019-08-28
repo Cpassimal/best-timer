@@ -31,13 +31,13 @@ export class SeriesComponent implements OnDestroy {
     h: null,
     m: '00',
     s: '45',
-    ms: null,
+    ms: '00',
   };
   public initialPausesFormated: ITimer = {
     h: null,
     m: '01',
     s: '30',
-    ms: null,
+    ms: '00',
   };
 
   public series: number = 3;
@@ -97,14 +97,14 @@ export class SeriesComponent implements OnDestroy {
 
     this.interval = setInterval(() => {
       this.delta = Date.now() - this.lastResume + this.pastTime;
+
       this.deltaFormated = formatTimeToTimer(this.delta);
       this._title.setTitle(`${this.deltaFormated.h} : ${this.deltaFormated.m} : ${this.deltaFormated.s}`);
 
-      const deltaS = this.delta / 1000;
       let currentInterval: IInterval;
 
       for (const i of intervals) {
-        if (i.start < deltaS && i.end > deltaS) {
+        if (i.start <= this.delta && i.end >= this.delta) {
           currentInterval = i;
         }
       }
@@ -112,12 +112,12 @@ export class SeriesComponent implements OnDestroy {
       if (currentInterval) {
         if (currentInterval.isSerie) {
           this.runningSeriesFormated = formatTimeToTimer(
-            this._initialSeriesTime * 1000 - (this.delta - (currentInterval.index * 1000 * (this._initialSeriesTime + this._initialPausesTime)))
+            this._initialSeriesTime - (this.delta - (currentInterval.index * (this._initialSeriesTime + this._initialPausesTime)))
           );
           this.runningPausesFormated = null;
         } else {
           this.runningPausesFormated = formatTimeToTimer(
-            this._initialPausesTime * 1000 - (this.delta - ((currentInterval.index + 1) * 1000 * this._initialSeriesTime + currentInterval.index * 1000 * this._initialPausesTime))
+            this._initialPausesTime - (this.delta - ((currentInterval.index + 1) * this._initialSeriesTime + currentInterval.index * this._initialPausesTime))
           );
           this.runningSeriesFormated = null;
         }
@@ -128,8 +128,8 @@ export class SeriesComponent implements OnDestroy {
       let toTest = this.seriesArray;
 
       for (const item of toTest) {
-        const endSerieTime = ((item + 1) * this._seriesTime + item * this._pausesTime) * 1000;
-        const endPauseTime = item !== toTest.length - 1 ? (endSerieTime + this._pausesTime * 1000) : 0;
+        const endSerieTime = ((item + 1) * this._seriesTime + item * this._pausesTime);
+        const endPauseTime = item !== toTest.length - 1 ? (endSerieTime + this._pausesTime) : 0;
 
         if (Math.abs(this.delta - endSerieTime + 2000) < 2 * INTERVAL || Math.abs(this.delta - endPauseTime + 2000) < 2 * INTERVAL){
           this.playSound(item === toTest.length - 1);
@@ -208,7 +208,7 @@ export class SeriesComponent implements OnDestroy {
   }
 
   public get currentWidth(): number {
-    return 100 * Math.min(this.delta / (this.series * this._seriesTime + (this.series - 1) * this._pausesTime) / 1000, 1);
+    return 100 * Math.min(this.delta / (this.series * this._seriesTime + (this.series - 1) * this._pausesTime), 1);
   }
 
   public get seriesWidth(): number {
@@ -235,18 +235,28 @@ export class SeriesComponent implements OnDestroy {
       serieInterval.end = time;
       intervals.push(serieInterval);
 
-      const pauseInterval: IInterval = {
-        index: i,
-        start: time,
-        end: 0,
-        isSerie: false,
-      };
-      time += this._initialPausesTime;
-      pauseInterval.end = time;
-      intervals.push(pauseInterval);
+      if (i !== this.seriesArray.length - 1) {
+        const pauseInterval: IInterval = {
+          index: i,
+          start: time,
+          end: 0,
+          isSerie: false,
+        };
+        time += this._initialPausesTime;
+        pauseInterval.end = time;
+        intervals.push(pauseInterval);
+      }
     }
 
     return intervals;
+  }
+
+  public setInitialSeries(): void {
+    this.initialSeriesFormated = this.seriesFormated;
+  }
+
+  public setInitialPauses(): void {
+    this.initialPausesFormated = this.pausesFormated;
   }
 
   private get _seriesTime(): number {
@@ -270,7 +280,8 @@ export class SeriesComponent implements OnDestroy {
   ): number {
     let s = +timer.s;
     let m = +timer.m;
+    let ms = +timer.ms;
 
-    return 60 * m + s;
+    return 60000 * m + 1000 * s + ms * 10;
   }
 }
