@@ -1,0 +1,40 @@
+@import '../../styles';
+
+.buttons {
+  display: flex;
+  justify-content: space-evenly;
+  width: 40rem;
+
+  .common-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 10rem;
+    height: 10rem;
+    border: 2px solid $color-pale;
+    border-radius: 50%;
+    font-size: 2rem;
+    font-family: $font-family;
+    cursor: pointer;
+  }
+
+  .button {
+    @extend .common-button;
+    color: $color-pale;
+
+    &:hover {
+      color: $color-dark;
+      background-color: $color-pale;
+    }
+  }
+
+  .button-coral {
+    @extend .common-button;
+    color: $color-coral;
+
+    &:hover {
+      color: $color-dark;
+      background-color: $color-pale;
+    }
+  }
+}

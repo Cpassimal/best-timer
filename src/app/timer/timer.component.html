@@ -1,75 +1,24 @@
-<div class="timer"
-     [class.small]="small">
-  <ng-container *ngIf="withH">
-    <div class="entity">
-      <span class="title">Hours</span>
-      <div (click)= "onArrowClick('up', 'h')"
-           [class.show]="withArrows"
-           class="arrow-up"></div>
-      <div class="value"
-           [class.small]="small">
-        {{ timer?.h }}
-      </div>
-      <div (click)= "onArrowClick('down', 'h')"
-           [class.show]="withArrows"
-           class="arrow-down"></div>
-    </div>
-    <span *ngIf="withM || withS || withMs"
-          [class.small]="small"
-          class="separator">:</span>
-  </ng-container>
-
-  <ng-container *ngIf="withM">
-    <div class="entity">
-      <span class="title">Minutes</span>
-      <div [class.show]="withArrows"
-           (click)= "onArrowClick('up', 'm')"
-           class="arrow-up"></div>
-      <div class="value"
-           [class.small]="small">
-        {{ timer?.m }}
-      </div>
-      <div [class.show]="withArrows"
-           (click)= "onArrowClick('down', 'm')"
-           class="arrow-down"></div>
-    </div>
-    <span *ngIf="withS || withMs"
-          [class.small]="small"
-          class="separator">:</span>
-  </ng-container>
-
-  <ng-container *ngIf="withS">
-    <div class="entity">
-      <span class="title">Seconds</span>
-      <div [class.show]="withArrows"
-           (click)= "onArrowClick('up', 's')"
-           class="arrow-up"></div>
-      <div class="value"
-           [class.small]="small">
-        {{ timer?.s }}
-      </div>
-      <div [class.show]="withArrows"
-           (click)= "onArrowClick('down', 's')"
-           class="arrow-down"></div>
-    </div>
-    <span *ngIf="withMs"
-          [class.small]="small"
-          class="separator">:</span>
-  </ng-container>
-
-  <ng-container *ngIf="withMs">
-    <div class="entity">
-      <span class="title">Milliseconds</span>
-      <div [class.show]="withArrows"
-           (click)= "onArrowClick('up', 'ms')"
-           class="arrow-up"></div>
-      <div class="value"
-           [class.small]="small">
-        {{ timer?.ms }}
-      </div>
-      <div [class.show]="withArrows"
-           (click)= "onArrowClick('down', 'ms')"
-           class="arrow-down"></div>
-    </div>
+<div class="container">
+  <ng-container *ngFor="let timerPart of timerParts">
+    <ng-container *ngIf="!timerPart.hide"
+                  [ngTemplateOutlet]="partTemplate"
+                  [ngTemplateOutletContext]="{ $implicit: timerPart, last: isLastToShow(timerPart) }">
+    </ng-container>
   </ng-container>
 </div>
+
+<ng-template #partTemplate let-timerPart let-last="last">
+  <div class="part-container">
+    <div class="header">
+      {{ timerPart.header }}
+    </div>
+    <div class="value"
+         [class.sizeUp]="isPaused && timerPart.isEditable"
+         (mousewheel)="onMouseWheel(timerPart, $event)">
+      {{ timerPart.value }}
+    </div>
+  </div>
+  <div *ngIf="!last"
+       class="separator"
+       [class.breathe]="!isStart && isPaused">:</div>
+</ng-template>

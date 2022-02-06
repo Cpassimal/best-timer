@@ -1,0 +1,12 @@
+<div class="buttons">
+  <div (click)="togglePause()"
+        class="button-coral">
+    <span *ngIf="isStart">Start</span>
+    <span *ngIf="!isStart && !isPaused">Pause</span>
+    <span *ngIf="!isStart && isPaused">Continue</span>
+  </div>
+  <div (click)="clear()"
+        class="button">
+    <span>Clear</span>
+  </div>
+</div>

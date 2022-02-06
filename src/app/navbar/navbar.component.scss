@@ -1,27 +1,41 @@
 @import '../../styles';
 
+@keyframes widthAnim {
+  from { width: 0; }
+  to { width: 8rem; }
+}
+
 .navbar {
   display: flex;
-  height: 100px;
+  justify-content: space-evenly;
+  height: 6rem;
   color: $color-pale;
-  font-size: 24px;
+  font-size: 1.5rem;
   font-family: $font-family;
+  width: 50%;
+  margin: auto;
 
   .header {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 50%;
+    flex-direction: column;
+    width: 25%;
     cursor: pointer;
     outline: none;
-    border-bottom: 2px solid $color-dark;
 
-    &.countdown-is-active {
-      border-bottom-color: $color-pale;
-    }
+    .border {
+      height: 2px;
+      margin-top: 1rem;
+      background-color: $color-dark;
+      width: 8rem;
 
-    &.chrono-is-active {
-      border-bottom-color: $color-pale;
+      &.active {
+        background-color: $color-coral;
+
+        animation-name: widthAnim;
+        animation-duration: 0.3s;
+      }
     }
   }
 }
