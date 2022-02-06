@@ -1,9 +1,6 @@
 import { Component, HostListener, OnDestroy } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 
-import { formatTimeToTimer } from '../helper';
-import { ITimer } from '../interfaces';
-
 interface IInterval {
   index: number;
   start: number;
@@ -11,16 +8,13 @@ interface IInterval {
   isSerie: boolean;
 }
 
-const INTERVAL = 10; // ms
-const TITLE = 'Timer';
-
 @Component({
   selector: 'app-series',
   templateUrl: './series.component.html',
   styleUrls: ['./series.component.scss'],
 })
-export class SeriesComponent implements OnDestroy {
-  public delta: number;
+export class SeriesComponent {
+  /* public delta: number;
   public deltaFormated: ITimer;
   public seriesFormated: ITimer;
   public pausesFormated: ITimer;
@@ -47,7 +41,7 @@ export class SeriesComponent implements OnDestroy {
 
   public isPaused: boolean = true;
   public isStart: boolean = true;
-  public interval: number;
+  public interval;
 
   private _audioHigh = new Audio('assets/high.mp3');
   private _audioLow = new Audio('assets/low.mp3');
@@ -283,5 +277,5 @@ export class SeriesComponent implements OnDestroy {
     let ms = +timer.ms;
 
     return 60000 * m + 1000 * s + ms * 10;
-  }
+  } */
 }

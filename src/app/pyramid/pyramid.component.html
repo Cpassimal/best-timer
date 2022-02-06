@@ -1,0 +1,41 @@
+<div class="container">
+  <app-timer  [timerParts]="timerParts"
+              [isPaused]="isPaused"
+              [isStart]="isStart"
+              (onTimerChange)="updateInitialTimer()">
+  </app-timer>
+
+  <div class="setup-container">
+    <div class="number-of-steps">
+      <label for="step">Number of steps:</label>
+      <input id="step"
+             type="number"
+             [(ngModel)]="numberOfSteps"
+             (focusin)="focus = true"
+             (focusout)="focus = false">
+    </div>
+    <div class="round-trip">
+      <span>R/T:</span>
+      <div [class.checked]="isRoundTrip"
+           [class.unchecked]="!isRoundTrip"
+           (click)="toggleRoundTrip()"></div>
+    </div>
+    <div class="total">Total: {{ getTotal() }}</div>
+  </div>
+
+  <div class="steps-container">
+    <ng-container *ngFor="let step of steps; trackBy: trackByStep">
+      <div class="step"
+           [class.done]="step.isDone"
+           [class.next]="step.isNext">
+        {{ step.value }}
+      </div>
+    </ng-container>
+  </div>
+
+  <action-buttons [isPaused]="isPaused"
+                  [isStart]="isStart"
+                  (onTogglePause)="togglePause()"
+                  (onClear)="clear()">
+  </action-buttons>
+</div>

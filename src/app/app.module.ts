@@ -13,24 +13,28 @@ import { ChronometerComponent } from './chronometer/chronometer.component';
 import { CountdownComponent } from './countdown/countdown.component';
 import { SeriesComponent } from './series/series.component';
 import { TimerComponent } from './timer/timer.component';
+import { ActionButtonsComponent } from './action-buttons/action-buttons.component';
 
 import { PipesModule } from './pipes/pipes.module';
+import { PyramidComponent } from './pyramid/pyramid.component';
 
 @NgModule({
   declarations: [
+    ActionButtonsComponent,
     AppComponent,
-    NavbarComponent,
     ChronometerComponent,
     CountdownComponent,
+    NavbarComponent,
+    PyramidComponent,
     SeriesComponent,
     TimerComponent,
   ],
   imports: [
+    AppRoutingModule,
     BrowserModule,
     CommonModule,
     FormsModule,
     PipesModule,
-    AppRoutingModule,
     RouterModule,
   ],
   providers: [

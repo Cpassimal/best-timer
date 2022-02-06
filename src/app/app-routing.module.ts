@@ -3,7 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { ChronometerComponent } from './chronometer/chronometer.component';
 import { CountdownComponent } from './countdown/countdown.component';
-import { SeriesComponent } from './series/series.component';
+import { PyramidComponent } from './pyramid/pyramid.component';
 
 export const ROUTES: Routes = [
   {
@@ -20,13 +20,13 @@ export const ROUTES: Routes = [
     component: CountdownComponent,
   },
   {
-    path: 'series',
-    component: SeriesComponent,
+    path: 'pyramid',
+    component: PyramidComponent,
   },
   {
     path: '**',
     redirectTo: 'chronometer',
-  }
+  },
 ];
 
 @NgModule({

@@ -2,55 +2,15 @@
 
 @keyframes timeIsUp {
   from { transform: scale(1); }
-  to { transform: scale(1.5); }
+  to { transform: scale(1.25); }
 }
 
 .container {
-  width: 80%;
   margin: auto;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-
-  @media #{$phone} {
-    width: 90%;
-  }
-
-  .buttons {
-    display: flex;
-    justify-content: space-evenly;
-    margin-top: 20px;
-    width: 80%;
-
-    @media #{$phone} {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      margin-top: 0;
-      width: 90%;
-    }
-
-    .button {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      color: $color-pale;
-      width: 300px;
-      height: 60px;
-      border: 2px solid $color-pale;
-      border-radius: 30px;
-      font-size: 30px;
-      font-family: $font-family;
-      cursor: pointer;
-
-      @media #{$phone} {
-        margin-top: 20px;
-        width: 90%;
-        height: 50px;
-      }
-    }
-  }
 
   .time-is-up {
     margin-top: 100px;
