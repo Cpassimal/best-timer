@@ -1,7 +1,7 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 import { formatTimes } from '../helper';
-import { ITimer } from '../interfaces';
+import { TimerPart, TimerPartType } from '../interfaces';
 
 @Component({
   selector: 'app-timer',
@@ -10,59 +10,56 @@ import { ITimer } from '../interfaces';
 })
 export class TimerComponent {
   @Input()
-  public timer: ITimer;
-
-  @Input()
-  public withArrows: boolean = false;
+  public timerParts: TimerPart[];
 
   @Input()
   public small: boolean = false;
 
   @Input()
-  public withH: boolean = true;
+  public isPaused: boolean = false;
 
   @Input()
-  public withM: boolean = true;
-
-  @Input()
-  public withS: boolean = true;
-
-  @Input()
-  public withMs: boolean = true;
+  public isStart: boolean = false;
 
   @Output()
-  public onTimerChange: EventEmitter<ITimer> = new EventEmitter();
+  public onTimerChange = new EventEmitter<void>();
 
-  public onArrowClick(
-    type: 'up' | 'down',
-    part: 'h' | 'm' | 's' | 'ms',
+  public onMouseWheel(
+    timerPart: TimerPart,
+    event: Event,
   ): void {
-    const current = +this.timer[part];
+    if (!timerPart.isEditable || !this.isPaused) {
+      return;
+    }
 
-    switch (type) {
+    const current = +timerPart.value;
+
+    const direction = (event as any).deltaY < 0 ? 'up' : 'down';
+
+    switch (direction) {
       case 'up': {
-        switch (part) {
-          case 'ms': {
-            this.timer[part] = current < 99 ? formatTimes(current + 1) : formatTimes(0);
+        switch (timerPart.type) {
+          case TimerPartType.ms: {
+            timerPart.value = current < 99 ? formatTimes(current + 1) : formatTimes(0);
 
             break;
           }
           default: {
-            this.timer[part] = current < 59 ? formatTimes(current + 1) : formatTimes(0);
+            timerPart.value = current < 59 ? formatTimes(current + 1) : formatTimes(0);
           }
         }
 
         break;
       }
       case 'down': {
-        switch (part) {
-          case 'ms': {
-            this.timer[part] = current > 0 ? formatTimes(current - 1) : formatTimes(99);
+        switch (timerPart.type) {
+          case TimerPartType.ms: {
+            timerPart.value = current > 0 ? formatTimes(current - 1) : formatTimes(99);
 
             break;
           }
           default: {
-            this.timer[part] = current > 0 ? formatTimes(current - 1) : formatTimes(59);
+            timerPart.value = current > 0 ? formatTimes(current - 1) : formatTimes(59);
           }
         }
 
@@ -70,6 +67,14 @@ export class TimerComponent {
       }
     }
 
-    this.onTimerChange.emit(this.timer);
+    this.onTimerChange.emit();
+  }
+
+  public isLastToShow(timerPart: TimerPart): boolean {
+    const lastToShow = this.timerParts
+    .filter(t => !t.hide)
+    .pop();
+
+    return lastToShow.type === timerPart.type;
   }
 }

@@ -1,23 +1,23 @@
 <div class="navbar">
   <div class="header"
-       [class.chrono-is-active]="chrono.isActive"
-       routerLink="chronometer"
-       routerLinkActive
-       #chrono="routerLinkActive">
-    <span>Chrono</span>
-  </div>
-  <div class="header"
-       [class.countdown-is-active]="countdown.isActive"
        routerLink="countdown"
        routerLinkActive
        #countdown="routerLinkActive">
     <span>Countdown</span>
+    <div class="border" [class.active]="countdown.isActive"></div>
   </div>
   <div class="header"
-       [class.countdown-is-active]="series.isActive"
-       routerLink="series"
+       routerLink="chronometer"
        routerLinkActive
-       #series="routerLinkActive">
-    <span>Series</span>
+       #chrono="routerLinkActive">
+    <span>Chrono</span>
+    <div class="border" [class.active]="chrono.isActive"></div>
+  </div>
+  <div class="header"
+       routerLink="pyramid"
+       routerLinkActive
+       #pyramid="routerLinkActive">
+    <span>Pyramid</span>
+    <div class="border" [class.active]="pyramid.isActive"></div>
   </div>
 </div>

@@ -1,21 +1,16 @@
 <div class="container">
   <ng-container *ngIf="!isTimeUp; else timeUp">
-    <app-timer [timer]="deltaFormated"
-                [withArrows]="withArrows"
-                (onTimerChange)="updateInitialTimer($event)"></app-timer>
+    <app-timer  [timerParts]="timerParts"
+                [isPaused]="isPaused"
+                [isStart]="isStart"
+                (onTimerChange)="updateInitialTimer()">
+    </app-timer>
 
-    <div class="buttons">
-      <div (click)="togglePause()"
-            class="button">
-        <span *ngIf="isStart">Start</span>
-        <span *ngIf="!isStart && !isPaused">Pause</span>
-        <span *ngIf="!isStart && isPaused">Continue</span>
-      </div>
-      <div (click)="clear()"
-            class="button">
-        <span>Clear</span>
-      </div>
-    </div>
+    <action-buttons [isPaused]="isPaused"
+                    [isStart]="isStart"
+                    (onTogglePause)="togglePause()"
+                    (onClear)="clear()">
+    </action-buttons>
   </ng-container>
 </div>
 
@@ -24,4 +19,3 @@
     <span>Time's UP !</span>
   </div>
 </ng-template>
-  

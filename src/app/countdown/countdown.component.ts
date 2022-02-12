@@ -1,11 +1,11 @@
 import { Component, HostListener, OnDestroy } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 
-import { formatTimeToTimer } from '../helper';
-import { ITimer } from '../interfaces';
+import { formatTimerToTime, getTitle, setTimerPartsValues } from '../helper';
+import { DEFAULT_TIMER_PARTS, INTERVAL, TimerPart, TimerPartType, TITLE } from '../interfaces';
 
-const INTERVAL = 10; // ms
-const TITLE = 'Timer';
+const COUNTDOWN_DEFAULT = [...DEFAULT_TIMER_PARTS]
+.map((p) => ({ ...p, isEditable: true, hide: p.type === TimerPartType.ms }));
 
 @Component({
   selector: 'app-countdown',
@@ -14,7 +14,7 @@ const TITLE = 'Timer';
 })
 export class CountdownComponent implements OnDestroy {
   public delta: number;
-  public deltaFormated: ITimer;
+  public timerParts: TimerPart[] = [...COUNTDOWN_DEFAULT];
   public lastResume: number;
   public pastTime: number;
 
@@ -22,7 +22,6 @@ export class CountdownComponent implements OnDestroy {
   public isStart: boolean = true;
   public interval: number;
 
-  public withArrows: boolean = true;
   public isTimeUp: boolean = false;
   public initialTime: number = 0;
 
@@ -32,8 +31,8 @@ export class CountdownComponent implements OnDestroy {
     this.resetTimer();
   }
 
-  public updateInitialTimer(timer: ITimer): void {
-    this.initialTime = this._formatTimerToTime(timer);
+  public updateInitialTimer(): void {
+    this.initialTime = formatTimerToTime(this.timerParts);
     this.resetTimer();
   }
 
@@ -42,7 +41,6 @@ export class CountdownComponent implements OnDestroy {
       return;
     }
 
-    this.withArrows = false;
     this.lastResume = Date.now();
 
     this.interval = setInterval(() => {
@@ -52,8 +50,8 @@ export class CountdownComponent implements OnDestroy {
         this.isTimeUp = true;
         this.clear();
       } else {
-        this.deltaFormated = formatTimeToTimer(this.delta);
-        this._title.setTitle(`${this.deltaFormated.h} : ${this.deltaFormated.m} : ${this.deltaFormated.s}`);
+        setTimerPartsValues(this.timerParts, this.delta);
+        this._title.setTitle(getTitle(this.timerParts));
       }
     }, INTERVAL);
 
@@ -62,11 +60,14 @@ export class CountdownComponent implements OnDestroy {
 
   public pause(): void {
     clearInterval(this.interval);
-    this.withArrows = true;
     this.pastTime = this.initialTime - this.delta;
   }
 
   public togglePause(): void {
+    if (!this.initialTime) {
+      return;
+    }
+
     if (this.isPaused) {
       this.play();
     } else {
@@ -92,9 +93,9 @@ export class CountdownComponent implements OnDestroy {
     this.delta = 0;
 
     if (this.initialTime) {
-      this.deltaFormated = formatTimeToTimer(this.initialTime);
+      setTimerPartsValues(this.timerParts, this.initialTime);
     } else {
-      this.deltaFormated = formatTimeToTimer(this.delta);
+      setTimerPartsValues(this.timerParts, 0);
       this._title.setTitle(TITLE);
     }
   }
@@ -135,14 +136,5 @@ export class CountdownComponent implements OnDestroy {
 
   public ngOnDestroy(): void {
     this.clear();
-  }
-
-  private _formatTimerToTime(timer: ITimer): number {
-    const hours = +timer.h * 3600 * 1000;
-    const mins = +timer.m * 60 * 1000;
-    const secs = +timer.s * 1000;
-    const ms = +timer.ms * 10;
-
-    return hours + mins + secs + ms;
   }
 }

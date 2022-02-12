@@ -1,16 +1,12 @@
 <div class="container">
-  <app-timer [timer]="deltaFormated"></app-timer>
+  <app-timer [timerParts]="timerParts"
+             [isPaused]="isPaused"
+             [isStart]="isStart">
+  </app-timer>
 
-  <div class="buttons">
-    <div (click)="togglePause()"
-         class="button">
-      <span *ngIf="isStart">Start</span>
-      <span *ngIf="!isStart && !isPaused">Pause</span>
-      <span *ngIf="!isStart && isPaused">Continue</span>
-    </div>
-    <div (click)="clear()"
-         class="button">
-      <span>Clear</span>
-    </div>
-  </div>
+  <action-buttons [isPaused]="isPaused"
+                  [isStart]="isStart"
+                  (onTogglePause)="togglePause()"
+                  (onClear)="clear()">
+  </action-buttons>
 </div>

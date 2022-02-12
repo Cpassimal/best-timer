@@ -1,11 +1,8 @@
 import { Component, HostListener, OnDestroy } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 
-import { formatTimeToTimer } from '../helper';
-import { ITimer } from '../interfaces';
-
-const INTERVAL = 10; // ms
-const TITLE = 'Timer';
+import { setTimerPartsValues, getTitle } from '../helper';
+import { DEFAULT_TIMER_PARTS, INTERVAL, TimerPart, TITLE } from '../interfaces';
 
 @Component({
   selector: 'app-chrono',
@@ -14,7 +11,7 @@ const TITLE = 'Timer';
 })
 export class ChronometerComponent implements OnDestroy {
   public delta: number;
-  public deltaFormated: ITimer;
+  public timerParts: TimerPart[] = [...DEFAULT_TIMER_PARTS];
   public lastResume: number;
   public pastTime: number;
 
@@ -33,8 +30,8 @@ export class ChronometerComponent implements OnDestroy {
 
     this.interval = setInterval(() => {
       this.delta = Date.now() - this.lastResume + this.pastTime;
-      this.deltaFormated = formatTimeToTimer(this.delta);
-      this._title.setTitle(`${this.deltaFormated.h} : ${this.deltaFormated.m} : ${this.deltaFormated.s}`);
+      setTimerPartsValues(this.timerParts, this.delta);
+      this._title.setTitle(getTitle(this.timerParts));
     }, INTERVAL);
 
     this.isStart = false;
@@ -65,7 +62,7 @@ export class ChronometerComponent implements OnDestroy {
   public resetTimer(): void {
     this.pastTime = 0;
     this.delta = 0;
-    this.deltaFormated = formatTimeToTimer(this.delta);
+    setTimerPartsValues(this.timerParts, 0);
     this._title.setTitle(TITLE);
   }
 
@@ -93,6 +90,6 @@ export class ChronometerComponent implements OnDestroy {
   }
 
   public ngOnDestroy(): void {
-    this.clear();
+    this.pause();
   }
 }
